@@ -1,5 +1,6 @@
 
 
+import 'package:atmostra/src/ui/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class AtmostraScaffold extends StatefulWidget {
@@ -13,16 +14,10 @@ class _AtmostraScaffoldState extends State<AtmostraScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Atmostra'
-        ),
-      ),
-      body: Column(
+      body: IndexedStack(
+        index: 0,
         children: const [
-          Text(
-            'Hello'
-          ),
+          HomeScreen()
         ],
       ),
     );

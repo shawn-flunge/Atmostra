@@ -1,5 +1,7 @@
+import 'package:atmostra/src/state/planet.dart';
 import 'package:atmostra/src/ui/app_scafold.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
 
@@ -11,11 +13,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Planets>(create: (_) => Planets())
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const AtmostraScaffold(),
       ),
-      home: const AtmostraScaffold(),
     );
   }
 }
