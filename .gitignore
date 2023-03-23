@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=flutter
 
 .gitconfig
-
+./.idea/
 ### Flutter ###
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -32,6 +32,7 @@ pubspec.lock
 **/android/key.properties
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+android/atmostra_android.iml
 google-services.json
 
 # iOS/XCode related
