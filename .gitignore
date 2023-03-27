@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=flutter
 
 .gitconfig
-./.idea/
+.idea/
 ### Flutter ###
 # Flutter/Dart/Pub related
 **/doc/api/
