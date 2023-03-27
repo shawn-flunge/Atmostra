@@ -11,53 +11,40 @@ class TempButton extends StatefulWidget {
   State<TempButton> createState() => _TempButtonState();
 }
 
-class _TempButtonState extends State<TempButton> with SingleTickerProviderStateMixin {
-
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    _controller.repeat();
-  }
+class _TempButtonState extends State<TempButton> {
+  final ValueNotifier<Offset> pulled = ValueNotifier(Offset.zero);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 36,
-      height: 36,
-      child: CustomPaint(
-        size: Size.infinite,
-        painter: TempPainter(
-          animation: _controller
+    return GestureDetector(
+      onVerticalDragUpdate: (details){
+        print(details.localPosition);
+      },
+      onVerticalDragEnd: (_){
+        print('dragEnd');
+      },
+      child: SizedBox(
+        width: 36,
+        height: 36,
+        child: CustomPaint(
+          size: Size.infinite,
+          painter: TempPainter(
+            // animation: _controller
+          ),
         ),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 }
 
-
 class TempPainter extends CustomPainter{
-
-  TempPainter({
-    required this.animation
-  }) : super(repaint: animation);
-
-  final Animation<double> animation;
 
   final _paint = Paint()..color=Colors.white..style=PaintingStyle.stroke..strokeWidth=5..strokeCap=StrokeCap.round;
 
   @override
   void paint(Canvas canvas, Size size) {
 
-    final y = 20 * animation.value;
+    final y = 20.0;
 
     final Path path = Path()
     ..moveTo(0, size.height/3 + y)
