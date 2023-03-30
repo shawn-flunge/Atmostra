@@ -2,7 +2,9 @@
 
 
 import 'package:atmostra/api_key.dart';
-import 'package:atmostra/src/data/http_client.dart';
+import 'package:atmostra/src/data/dto/weather_dto.dart';
+import 'package:atmostra/src/data/util/http_client.dart';
+import 'package:atmostra/src/data/util/cache.dart';
 
 
 class OpenWeatherApi{
@@ -18,29 +20,10 @@ class OpenWeatherApi{
   // final String languageCode;
   late final AppHttpClient _httpClient;
 
-  final List<_Cache> _cache = [];
+  final List<Cache<WeatherDto>> _cache = [];
 
-
-  getWeatherByName({required String name}){
-    _httpClient.get(path: '/weather', queryStrings: ['q=$name']);
-  }
-}
-
-
-class _Cache{
-  const _Cache({
-    required this.requestAt,
-    required this.path
-  });
-
-  final int requestAt;
-  final String path;
-}
-
-
-extension _CacheExt on _Cache{
-
-  operator <(_Cache other){
-    return requestAt < other.requestAt + 86400000;
+  getWeatherByName({required String name}) async{
+    final result = await _httpClient.get(path: '/weather', queryStrings: ['q=$name'], fromJson: WeatherDto.fromJson);
+    if(!result.success) return;
   }
 }
