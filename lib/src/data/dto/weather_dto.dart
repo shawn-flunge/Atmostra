@@ -72,6 +72,6 @@ int _cloudsFromJson(Map<String, dynamic> json) => json['all'] as int;
 
 // wind
 double _windSpeedFromJson(Map<dynamic, dynamic> json, String key) => json['wind']['speed'] as double;
-double _windGustFromJson(Map<dynamic, dynamic> json, String key) => json['wind']['gust'] as double;
+double _windGustFromJson(Map<dynamic, dynamic> json, String key) => (json['wind']['gust'] ?? 0.0) as double;
 int _windDegreeFromJson(Map<dynamic, dynamic> json, String key) => json['wind']['deg'] as int;
 
