@@ -38,8 +38,47 @@ class _HomeScreenState extends State<HomeScreen> {
             // left: 0,
             // right: 0,
             child: TempButton()
+        ),
+        MaterialButton(
+          color: Colors.red,
+          onPressed: (){
+            planets.getWeatherByName('seoul');
+          },
+        ),
+        const Positioned(
+          top: 150,
+          child: Temp()
         )
       ],
+    );
+  }
+}
+
+class Temp extends StatelessWidget {
+  const Temp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      decoration: const BoxDecoration(
+        color: Colors.white38,
+        borderRadius: BorderRadius.all(Radius.circular(6))
+      ),
+      child: Consumer<Planets>(
+          builder: (context, planets, child){
+            if(planets.planets.isEmpty) return const Text('empty');
+
+            return Column(
+              children: List.generate(planets.planets.length, (index) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                    planets.planets[index].name
+                ),
+              )),
+            );
+          }
+      ),
     );
   }
 }
