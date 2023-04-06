@@ -12,23 +12,19 @@ class Cache<T>{
   final T data;
 
   operator <(DateTime date){
-    return date.millisecondsSinceEpoch < requestAt.millisecondsSinceEpoch + 300000;
+    return date.millisecondsSinceEpoch < (requestAt.millisecondsSinceEpoch + 300000);
   }
 
-  @override
-  bool operator ==(Object other) {
-    final o = other as Cache;
-    return identifier == o.identifier && this < o.requestAt;
+  bool _compare(String id){
+    return identifier == id && this < DateTime.now();
   }
 }
 
-extension CacheListExtension on List<Cache>{
+extension CacheListExtension<T> on List<Cache<T>>{
 
   (bool, int) hasData(String identifier){
-
-    final index = indexWhere((element) => element.identifier == identifier);
+    final index = indexWhere((element) => element._compare(identifier));
     if(index == -1) return (false, -1);
-
     return (true, index);
   }
 
