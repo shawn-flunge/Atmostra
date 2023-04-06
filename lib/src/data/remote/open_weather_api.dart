@@ -23,7 +23,6 @@ class OpenWeatherApi{
   final List<Cache<WeatherDto>> _cache = [];
 
   Future<WeatherDto?> getWeatherByName({required String name}) async{
-    final id = '/weather/$name';
 
     final hasData = _cache.hasData(name);
     if(hasData.$0 == true){
@@ -32,7 +31,7 @@ class OpenWeatherApi{
 
     final result = await _httpClient.get(path: '/weather', queryStrings: ['q=$name'], fromJson: WeatherDto.fromJson);
     if(!result.success) return null;
-    _cache.add(Cache(requestAt: DateTime.now(), identifier: id, data: result.data!));
+    _cache.add(Cache(requestAt: DateTime.now(), identifier: name, data: result.data!));
     return result.data!;
   }
 }
