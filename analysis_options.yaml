@@ -29,6 +29,10 @@ linter:
 # https://dart.dev/guides/language/analysis-options
 
 analyzer:
+  exclude:
+    - lib/src/data/dto/
+  errors:
+      invalid_annotation_target: ignore
   enable-experiment:
     - records
     - patterns
