@@ -1,32 +1,26 @@
 
 
-class Cache<T>{
-  const Cache({
-    required this.requestAt,
-    required this.identifier,
+import 'package:atmostra/src/util/mixin/comparable.dart';
+
+class Cache<T> with ComparableMixin{
+
+  Cache({
+    required String identifier,
     required this.data,
-  });
+  }){
+    requestAt = DateTime.now();
+    this.identifier = identifier;
+  }
 
-  final DateTime requestAt;
-  final String identifier;
   final T data;
-
-  operator <(DateTime date){
-    return date.millisecondsSinceEpoch < (requestAt.millisecondsSinceEpoch + 300000);
-  }
-
-  bool _compare(String id){
-    return identifier == id && this < DateTime.now();
-  }
 }
 
 extension CacheListExtension<T> on List<Cache<T>>{
 
   (bool, int) hasData(String identifier){
-    final index = indexWhere((element) => element._compare(identifier));
+    final index = indexWhere((element) => element.compare(identifier));
     if(index == -1) return (false, -1);
     return (true, index);
   }
-
 
 }

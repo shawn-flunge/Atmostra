@@ -31,7 +31,7 @@ class OpenWeatherApi{
 
     final result = await _httpClient.get(path: '/weather', queryStrings: ['q=$name'], fromJson: WeatherDto.fromJson);
     if(!result.success) return null;
-    _cache.add(Cache(requestAt: DateTime.now(), identifier: name, data: result.data!));
+    _cache.add(Cache(identifier: name, data: result.data!));
     return result.data!;
   }
 }
