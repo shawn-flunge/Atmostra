@@ -2,6 +2,8 @@
 
 import 'package:atmostra/src/data/dto/weather_dto.dart';
 import 'package:atmostra/src/data/source/open_weather_api.dart';
+import 'package:atmostra/src/util/extension/comparable_list.dart';
+import 'package:atmostra/src/util/mixin/comparable_mixin.dart';
 import 'package:flutter/material.dart';
 
 class Planets extends ChangeNotifier{
@@ -14,16 +16,21 @@ class Planets extends ChangeNotifier{
   late OpenWeatherApi _weatherApi;
 
   PlanetDto? selected;
-  final List<PlanetDto> planets = [];
+  final List<PlanetDto> list = [];
 
   getWeatherByName(String name) async{
+
+    final hasPlanet = list.hasData(name);
+    if(hasPlanet.$0) return;
+
     final weather = await _weatherApi.getWeatherByName(name: name);
     if(weather == null) return;
     final planet = PlanetDto(
-      name: weather.name,
+      name: name,
       weather: weather,
     );
-    planets.add(planet);
+
+    list.add(planet);
     notifyListeners();
   }
 
@@ -35,13 +42,16 @@ enum PlanetType{
   custom,
 }
 
-class PlanetDto{
+class PlanetDto with ComparableMixin{
 
-  const PlanetDto({
+  PlanetDto({
     required this.name,
     this.type = PlanetType.earth,
-    required this.weather
-  });
+    required this.weather,
+  }){
+    requestAt = DateTime.now();
+    identifier = name;
+  }
 
   final String name;
   final PlanetType type;

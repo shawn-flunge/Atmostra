@@ -67,13 +67,13 @@ class Temp extends StatelessWidget {
       ),
       child: Consumer<Planets>(
           builder: (context, planets, child){
-            if(planets.planets.isEmpty) return const Text('empty');
+            if(planets.list.isEmpty) return const Text('empty');
 
             return Column(
-              children: List.generate(planets.planets.length, (index) => Padding(
+              children: List.generate(planets.list.length, (index) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
-                    planets.planets[index].name
+                    planets.list[index].name
                 ),
               )),
             );
