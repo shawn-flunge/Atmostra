@@ -1,7 +1,7 @@
 
 
 import 'package:atmostra/src/data/dto/weather_dto.dart';
-import 'package:atmostra/src/data/remote/open_weather_api.dart';
+import 'package:atmostra/src/data/source/open_weather_api.dart';
 import 'package:flutter/material.dart';
 
 class Planets extends ChangeNotifier{
