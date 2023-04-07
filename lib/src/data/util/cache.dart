@@ -1,6 +1,6 @@
 
 
-import 'package:atmostra/src/util/mixin/comparable.dart';
+import 'package:atmostra/src/util/mixin/comparable_mixin.dart';
 
 class Cache<T> with ComparableMixin{
 
@@ -13,14 +13,4 @@ class Cache<T> with ComparableMixin{
   }
 
   final T data;
-}
-
-extension CacheListExtension<T> on List<Cache<T>>{
-
-  (bool, int) hasData(String identifier){
-    final index = indexWhere((element) => element.compare(identifier));
-    if(index == -1) return (false, -1);
-    return (true, index);
-  }
-
 }
