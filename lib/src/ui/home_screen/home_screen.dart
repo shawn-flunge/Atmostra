@@ -18,17 +18,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
 
-  int index = 0;
   @override
   Widget build(BuildContext context) {
     final planets = context.watch<Planets>();
-
 
     return Stack(
       alignment: Alignment.center,
       children: [
         SkyBackground(
-            colors: SkyColorSet.values[index].colors,
+            colors: planets.selectedTimeColor,
             bottom: Alignment.bottomRight
         ),
 
@@ -42,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         MaterialButton(
           color: Colors.red,
           onPressed: (){
-            planets.getWeatherByName('seoul');
+            planets.getWeatherByName('hawaii');
           },
         ),
         const Positioned(
