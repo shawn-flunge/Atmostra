@@ -10,7 +10,7 @@ _$_WeatherDto _$$_WeatherDtoFromJson(Map<String, dynamic> json) =>
     _$_WeatherDto(
       id: json['id'] as int? ?? 0,
       name: json['name'] as String,
-      time: json['dt'] as int,
+      time: _timeFromJson(json, 'dt') as int,
       timezone: json['timezone'] as int? ?? 0,
       country: _countryFromJson(json, 'country') as String,
       sunrise: _sunriseFromJson(json, 'sunrise') as int,

@@ -22,7 +22,7 @@ WeatherDto _$WeatherDtoFromJson(Map<String, dynamic> json) {
 mixin _$WeatherDto {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  @JsonKey(name: 'dt')
+  @JsonKey(name: 'dt', readValue: _timeFromJson)
   int get time => throw _privateConstructorUsedError;
   int get timezone => throw _privateConstructorUsedError;
   @JsonKey(readValue: _countryFromJson)
@@ -80,7 +80,7 @@ abstract class $WeatherDtoCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      @JsonKey(name: 'dt')
+      @JsonKey(name: 'dt', readValue: _timeFromJson)
           int time,
       int timezone,
       @JsonKey(readValue: _countryFromJson)
@@ -274,7 +274,7 @@ abstract class _$$_WeatherDtoCopyWith<$Res>
   $Res call(
       {int id,
       String name,
-      @JsonKey(name: 'dt')
+      @JsonKey(name: 'dt', readValue: _timeFromJson)
           int time,
       int timezone,
       @JsonKey(readValue: _countryFromJson)
@@ -461,7 +461,7 @@ class _$_WeatherDto implements _WeatherDto {
   const _$_WeatherDto(
       {this.id = 0,
       required this.name,
-      @JsonKey(name: 'dt')
+      @JsonKey(name: 'dt', readValue: _timeFromJson)
           required this.time,
       this.timezone = 0,
       @JsonKey(readValue: _countryFromJson)
@@ -513,7 +513,7 @@ class _$_WeatherDto implements _WeatherDto {
   @override
   final String name;
   @override
-  @JsonKey(name: 'dt')
+  @JsonKey(name: 'dt', readValue: _timeFromJson)
   final int time;
   @override
   @JsonKey()
@@ -673,7 +673,7 @@ abstract class _WeatherDto implements WeatherDto {
   const factory _WeatherDto(
       {final int id,
       required final String name,
-      @JsonKey(name: 'dt')
+      @JsonKey(name: 'dt', readValue: _timeFromJson)
           required final int time,
       final int timezone,
       @JsonKey(readValue: _countryFromJson)
@@ -724,7 +724,7 @@ abstract class _WeatherDto implements WeatherDto {
   @override
   String get name;
   @override
-  @JsonKey(name: 'dt')
+  @JsonKey(name: 'dt', readValue: _timeFromJson)
   int get time;
   @override
   int get timezone;

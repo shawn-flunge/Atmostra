@@ -10,7 +10,7 @@ class WeatherDto with _$WeatherDto{
   const factory WeatherDto({
     @Default(0) int id,
     required String name,
-    @JsonKey(name: 'dt') required int time,
+    @JsonKey(name: 'dt', readValue: _timeFromJson) required int time,
     @Default(0) int timezone,
 
     @JsonKey(readValue: _countryFromJson) required String country,
@@ -44,10 +44,12 @@ class WeatherDto with _$WeatherDto{
   factory WeatherDto.fromJson(Map<String, dynamic> json) => _$WeatherDtoFromJson(json);
 }
 
+int _timeFromJson(Map<dynamic, dynamic> json, String key) => json[key]*1000 as int;
+
 // sys
 String _countryFromJson(Map<dynamic, dynamic> json, String key) => json['sys']['country'] as String;
-int _sunriseFromJson(Map<dynamic, dynamic> json, String key) => json['sys']['sunrise'] as int;
-int _sunsetFromJson(Map<dynamic, dynamic> json, String key) => json['sys']['sunset'] as int;
+int _sunriseFromJson(Map<dynamic, dynamic> json, String key) => (json['sys']['sunrise'] * 1000) as int;
+int _sunsetFromJson(Map<dynamic, dynamic> json, String key) => (json['sys']['sunset'] * 1000) as int;
 
 // coord
 double _latFromJson(Map<dynamic, dynamic> json, String key) => json['coord']['lat'] as double;
