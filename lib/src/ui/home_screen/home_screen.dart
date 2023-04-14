@@ -26,8 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       alignment: Alignment.center,
       children: [
         SkyBackground(
-            colors: planets.selectedTimeColor,
-            bottom: Alignment.bottomRight
+          planet: planets.selected!,
         ),
 
         const Positioned(
@@ -37,11 +36,24 @@ class _HomeScreenState extends State<HomeScreen> {
             // right: 0,
             child: TempButton()
         ),
-        MaterialButton(
-          color: Colors.red,
-          onPressed: (){
-            planets.getWeatherByName('hawaii');
-          },
+        Positioned(
+          top: 500,
+          child: Column(
+            children: [
+              MaterialButton(
+                color: Colors.red,
+                onPressed: (){
+                  planets.getWeatherByName('Athens');
+                },
+              ),
+              MaterialButton(
+                color: Colors.red,
+                onPressed: (){
+                  planets.getWeatherByName('seoul');
+                },
+              ),
+            ],
+          ),
         ),
         const Positioned(
           top: 150,

@@ -23,26 +23,28 @@ class Planets extends ChangeNotifier{
   getWeatherByName(String name) async{
 
     final hasPlanet = list.hasData(name);
-    if(hasPlanet.$0) return;
+    if(hasPlanet.$0){
+      return;
+    }
 
     final weather = await _weatherApi.getWeatherByName(name: name);
     if(weather == null) return;
+
     final planet = PlanetDto(
       name: weather.name,
       weather: weather,
+      colors: _getBackgroundColor(weather)
     );
-
-    list.add(planet);
     selected = planet;
+    list.add(planet);
     notifyListeners();
   }
 
-  List<Color> get selectedTimeColor{
+  List<Color> _getBackgroundColor(WeatherDto weather){
 
-    final weather = selected!.weather;
     final time = DateTime.now().toUtc().add(Duration(seconds: weather.timezone));
-    final sunset = DateTime.fromMillisecondsSinceEpoch(weather.sunset ).add(Duration(seconds: weather.timezone)).toUtc();
-    final sunrise = DateTime.fromMillisecondsSinceEpoch(weather.sunrise ).add(Duration(seconds: weather.timezone)).toUtc();
+    final sunset = DateTime.fromMillisecondsSinceEpoch(weather.sunset).add(Duration(seconds: weather.timezone)).toUtc();
+    final sunrise = DateTime.fromMillisecondsSinceEpoch(weather.sunrise).add(Duration(seconds: weather.timezone)).toUtc();
 
     if(time.hour>23){
       return SkyColorSet.midnight.colors;
@@ -68,17 +70,11 @@ class Planets extends ChangeNotifier{
 
 }
 
-
-enum PlanetType{
-  earth,
-  custom,
-}
-
 class PlanetDto with ComparableMixin{
 
   PlanetDto({
     required this.name,
-    this.type = PlanetType.earth,
+    required this.colors,
     required this.weather,
   }){
     requestAt = DateTime.now();
@@ -86,6 +82,43 @@ class PlanetDto with ComparableMixin{
   }
 
   final String name;
-  final PlanetType type;
   final WeatherDto weather;
+  final List<Color> colors;
+
+  PlanetDto lerp(PlanetDto a, PlanetDto b, double t){
+    return PlanetDto(
+      name: b.name,
+      weather: b.weather,
+      colors: _ColorListTween(begin: a.colors, end: b.colors).lerp(t)
+    );
+  }
+}
+
+class _ColorListTween extends Tween<List<Color>>{
+
+  _ColorListTween({
+    super.begin,
+    super.end
+  });
+
+  @override
+  List<Color> lerp(double t) {
+    return List.generate(begin!.length, (index) => Color.lerp(begin![index], end![index], t)!);
+  }
+}
+
+
+
+
+class PlanetDtoTween extends Tween<PlanetDto>{
+
+  PlanetDtoTween({
+    super.begin,
+    super.end
+  });
+
+  @override
+  PlanetDto lerp(double t) {
+    return begin!.lerp(begin!, end!, t);
+  }
 }

@@ -9,6 +9,6 @@ mixin ComparableMixin{
   }
 
   bool compare(String id){
-    return identifier == id && this < DateTime.now();
+    return identifier.toUpperCase() == id.toUpperCase() && this < DateTime.now();
   }
 }

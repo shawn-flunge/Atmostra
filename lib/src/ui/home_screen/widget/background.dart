@@ -2,6 +2,7 @@
 
 
 import 'package:atmostra/src/const/durations.dart';
+import 'package:atmostra/src/state/planet.dart';
 import 'package:flutter/material.dart';
 
 
@@ -12,12 +13,10 @@ class SkyBackground extends ImplicitlyAnimatedWidget{
   const SkyBackground({
     super.key,
     super.duration = celestialDuration,
-    required this.colors,
-    required this.bottom,
+    required this.planet,
   });
 
-  final List<Color> colors;
-  final Alignment bottom;
+  final PlanetDto planet;
 
   @override
   AnimatedWidgetBaseState<SkyBackground> createState() => _SkyBackgroundState();
@@ -26,24 +25,15 @@ class SkyBackground extends ImplicitlyAnimatedWidget{
 
 class _SkyBackgroundState extends AnimatedWidgetBaseState<SkyBackground>{
 
-  ColorListTween? _colors;
-  AlignmentTween? _alignment;
+  PlanetDtoTween? _planetDto2Tween;
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    // print('😍forEachTween');
-
-    _colors = visitor(
-        _colors,
-        widget.colors,
-            (value) => ColorListTween(begin: value as List<Color>, end: widget.colors)
-    ) as ColorListTween?;
-
-    _alignment = visitor(
-        _alignment,
-        widget.bottom,
-            (value) => AlignmentTween(begin: value, end: widget.bottom)
-    ) as AlignmentTween?;
+    _planetDto2Tween = visitor(
+        _planetDto2Tween,
+        widget.planet,
+        (value) => PlanetDtoTween(begin: value as PlanetDto, end: widget.planet)
+    ) as PlanetDtoTween?;
   }
 
   @override
@@ -52,8 +42,7 @@ class _SkyBackgroundState extends AnimatedWidgetBaseState<SkyBackground>{
     return CustomPaint(
       size: Size.infinite,
       painter: _SkyBackgroundPainter(
-          colors: _colors!.evaluate(animation),
-          bottomAlign: _alignment!.evaluate(animation)
+        planet: _planetDto2Tween!.evaluate(animation)
       ),
     );
   }
@@ -64,18 +53,5 @@ class _SkyBackgroundState extends AnimatedWidgetBaseState<SkyBackground>{
 
 
 
-
-class ColorListTween extends Tween<List<Color>>{
-
-  ColorListTween({
-    super.begin,
-    super.end
-  });
-
-  @override
-  List<Color> lerp(double t) {
-    return List.generate(begin!.length, (index) => Color.lerp(begin![index], end![index], t)!);
-  }
-}
 
 
