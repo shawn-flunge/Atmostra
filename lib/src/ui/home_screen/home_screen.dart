@@ -43,13 +43,13 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialButton(
                 color: Colors.red,
                 onPressed: (){
-                  planets.getWeatherByName('Athens');
+                  planets.getWeatherByName('liverpool');
                 },
               ),
               MaterialButton(
                 color: Colors.red,
                 onPressed: (){
-                  planets.getWeatherByName('seoul');
+                  planets.getWeatherByName('tokyo');
                 },
               ),
             ],

@@ -1,5 +1,5 @@
 
-
+import 'dart:math' as math;
 
 import 'package:atmostra/src/const/durations.dart';
 import 'package:atmostra/src/state/planet.dart';

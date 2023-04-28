@@ -1,5 +1,8 @@
 
 
+import 'dart:ui';
+import 'dart:math' as math;
+
 import 'package:atmostra/src/data/dto/weather_dto.dart';
 import 'package:atmostra/src/data/source/open_weather_api.dart';
 import 'package:atmostra/src/design/color/sky_color_set.dart';
@@ -33,11 +36,30 @@ class Planets extends ChangeNotifier{
     final planet = PlanetDto(
       name: weather.name,
       weather: weather,
+      position: _computePosition(weather),
       colors: _getBackgroundColor(weather)
     );
     selected = planet;
     list.add(planet);
     notifyListeners();
+  }
+
+  double _computePosition(WeatherDto weatherDto){
+
+    final now = DateTime.now();
+    if(now.millisecondsSinceEpoch > weatherDto.sunset){
+      final tomorrow = DateTime(now.year, now.month, now.day+1, 4).millisecondsSinceEpoch;
+
+      final base = tomorrow - weatherDto.sunset;
+      final current = now.millisecondsSinceEpoch - weatherDto.sunset;
+
+      return current/base;
+    } else{
+      final base = weatherDto.sunset - weatherDto.sunrise;
+      final current = now.millisecondsSinceEpoch - weatherDto.sunrise;
+      // final current = DateTime.now().toUtc().add(Duration(seconds: weatherDto.time));
+      return current/base;
+    }
   }
 
   List<Color> _getBackgroundColor(WeatherDto weather){
@@ -76,6 +98,7 @@ class PlanetDto with ComparableMixin{
     required this.name,
     required this.colors,
     required this.weather,
+    required this.position,
   }){
     requestAt = DateTime.now();
     identifier = name;
@@ -84,15 +107,50 @@ class PlanetDto with ComparableMixin{
   final String name;
   final WeatherDto weather;
   final List<Color> colors;
+  final double position;
+
+  bool get isDay {
+    final now = DateTime.now().toUtc().add(Duration(seconds: weather.timezone)).millisecondsSinceEpoch;
+    final sunset = DateTime.fromMillisecondsSinceEpoch(weather.sunset).millisecondsSinceEpoch;
+    return now < sunset;
+  }
+  bool get isNight => !isDay;
 
   PlanetDto lerp(PlanetDto a, PlanetDto b, double t){
+    final condition = isTWithinAorB(a.position, b.position, t);
+
     return PlanetDto(
-      name: b.name,
-      weather: b.weather,
-      colors: _ColorListTween(begin: a.colors, end: b.colors).lerp(t)
+      name: condition ? a.name : b.name,
+        weather: condition ? a.weather : b.weather,
+        position: _RadianTween(begin: a.position, end: b.position).lerp(t),
+        colors: _ColorListTween(begin: a.colors, end: b.colors).lerp(t)
     );
   }
 }
+
+bool isTWithinAorB(num a, num b, t){
+  return t < (1-a)/(1-a+b);
+}
+
+const double _range = 1.13;
+class _RadianTween extends Tween<double>{
+  _RadianTween({
+    super.begin,
+    super.end,
+  });
+
+  @override
+  double lerp(double t) {
+
+    final ratio = (1-begin!)/(1-begin!+end!);
+    if(t < ratio){
+      return begin! + (_range - begin!)*t/ratio;
+    } else{
+      return -_range + (_range + end!) * (t-ratio) / (1-ratio);
+    }
+  }
+}
+
 
 class _ColorListTween extends Tween<List<Color>>{
 
