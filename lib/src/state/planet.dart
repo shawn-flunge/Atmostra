@@ -1,7 +1,5 @@
 
 
-import 'dart:ui';
-import 'dart:math' as math;
 
 import 'package:atmostra/src/data/dto/weather_dto.dart';
 import 'package:atmostra/src/data/source/open_weather_api.dart';
