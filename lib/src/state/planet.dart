@@ -114,16 +114,6 @@ class PlanetDto with ComparableMixin{
   }
   bool get isNight => !isDay;
 
-  PlanetDto lerp(PlanetDto a, PlanetDto b, double t){
-    final condition = isTWithinAorB(a.position, b.position, t);
-
-    return PlanetDto(
-      name: condition ? a.name : b.name,
-        weather: condition ? a.weather : b.weather,
-        position: _RadianTween(begin: a.position, end: b.position).lerp(t),
-        colors: _ColorListTween(begin: a.colors, end: b.colors).lerp(t)
-    );
-  }
 }
 
 bool isTWithinAorB(num a, num b, t){
@@ -175,6 +165,13 @@ class PlanetDtoTween extends Tween<PlanetDto>{
 
   @override
   PlanetDto lerp(double t) {
-    return begin!.lerp(begin!, end!, t);
+    final condition = isTWithinAorB(begin!.position, end!.position, t);
+
+    return PlanetDto(
+        name: condition ? begin!.name : end!.name,
+        weather: condition ? begin!.weather : end!.weather,
+        position: _RadianTween(begin: begin!.position, end: end!.position).lerp(t),
+        colors: _ColorListTween(begin: begin!.colors, end: end!.colors).lerp(t)
+    );
   }
 }
