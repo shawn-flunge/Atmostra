@@ -4,45 +4,86 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'weather_dto.g.dart';
 part 'weather_dto.freezed.dart';
 
+/// todo : It would be better if I could get name from JsonKey like rain.1h.
 @freezed
-class WeatherDto with _$WeatherDto{
-
+class WeatherDto with _$WeatherDto {
   const factory WeatherDto({
-    @Default(0) int id,
+    required int id,
     required String name,
+    required int timezone,
     @JsonKey(name: 'dt', readValue: _timeFromJson) required int time,
-    @Default(0) int timezone,
-
     @JsonKey(readValue: _countryFromJson) required String country,
     @JsonKey(readValue: _sunriseFromJson) required int sunrise,
     @JsonKey(readValue: _sunsetFromJson) required int sunset,
-
-    @JsonKey(readValue: _latFromJson) required double lat,
-    @JsonKey(readValue: _longFromJson) required double long,
-
-    @JsonKey(readValue: _mainFromJson,includeFromJson: true) required String main,
-    @JsonKey(readValue: _descriptionFromJson, includeFromJson: true) required String description,
-    @JsonKey(readValue: _iconFromJson) required String icon,
-    @JsonKey(readValue: _weatherIdFromJson) required int weatherId,
-
-    @JsonKey(readValue: _tempFromJson) required double temp,
-    @JsonKey(readValue: _feelsLikeFromJson) required double feelsLike,
-    @JsonKey(readValue: _tempMinFromJson) required double tempMin,
-    @JsonKey(readValue: _tempMaxFromJson) required double tempMax,
-    @JsonKey(readValue: _pressureFromJson) required int pressure,
-    @JsonKey(readValue: _humidityFromJson) required int humidity,
-
-
-    @JsonKey(fromJson: _cloudsFromJson) required int clouds,
-    @Default(0) int visibility,
-
-    @JsonKey(readValue: _windSpeedFromJson) required double windSpeed,
-    @JsonKey(readValue: _windDegreeFromJson) required int windDegree,
-    @JsonKey(readValue: _windGustFromJson) required double windGust,
+    required Coord coord,
+    required List<Weather> weather,
+    required Main main,
+    required int visibility,
+    required Wind wind,
+    required Clouds clouds,
+    @JsonKey(readValue: _rainFromJson) required double rain,
+    @JsonKey(readValue: _snowFromJson) required double snow,
   }) = _WeatherDto;
 
   factory WeatherDto.fromJson(Map<String, dynamic> json) => _$WeatherDtoFromJson(json);
 }
+
+@freezed
+class Coord with _$Coord {
+  const factory Coord({
+    required double lon,
+    required double lat,
+  }) = _Coord;
+
+  factory Coord.fromJson(Map<String, dynamic> json) => _$CoordFromJson(json);
+}
+
+@freezed
+class Weather with _$Weather {
+  const factory Weather({
+    required int id,
+    required String main,
+    required String description,
+    required String icon,
+  }) = _Weather;
+
+  factory Weather.fromJson(Map<String, dynamic> json) =>
+      _$WeatherFromJson(json);
+}
+
+@freezed
+class Main with _$Main {
+  const factory Main({
+    required double temp,
+    @JsonKey(name: 'feels_like') required double feelsLike,
+    @JsonKey(name: 'temp_min') required double tempMin,
+    @JsonKey(name: 'temp_max') required double tempMax,
+    required int pressure,
+    required int humidity,
+  }) = _Main;
+
+  factory Main.fromJson(Map<String, dynamic> json) => _$MainFromJson(json);
+}
+
+@freezed
+class Wind with _$Wind {
+  const factory Wind({
+    required double speed,
+    required int deg,
+  }) = _Wind;
+
+  factory Wind.fromJson(Map<String, dynamic> json) => _$WindFromJson(json);
+}
+
+@freezed
+class Clouds with _$Clouds {
+  const factory Clouds({
+    required int all,
+  }) = _Clouds;
+
+  factory Clouds.fromJson(Map<String, dynamic> json) => _$CloudsFromJson(json);
+}
+
 
 int _timeFromJson(Map<dynamic, dynamic> json, String key) => json[key]*1000 as int;
 
@@ -51,29 +92,5 @@ String _countryFromJson(Map<dynamic, dynamic> json, String key) => json['sys']['
 int _sunriseFromJson(Map<dynamic, dynamic> json, String key) => (json['sys']['sunrise'] * 1000) as int;
 int _sunsetFromJson(Map<dynamic, dynamic> json, String key) => (json['sys']['sunset'] * 1000) as int;
 
-// coord
-double _latFromJson(Map<dynamic, dynamic> json, String key) => json['coord']['lat'] as double;
-double _longFromJson(Map<dynamic, dynamic> json, String key) => json['coord']['lon'] as double;
-
-// weather
-String _mainFromJson(Map<dynamic, dynamic> json, String key) => json['weather'].first['main'] as String;
-String _descriptionFromJson(Map<dynamic, dynamic> json, String key) => json['weather'].first['description'] as String;
-String _iconFromJson(Map<dynamic, dynamic> json, String key) => json['weather'].first['icon'] as String;
-int _weatherIdFromJson(Map<dynamic, dynamic> json, String key) => json['weather'].first['id'] as int;
-
-// main
-double _tempFromJson(Map<dynamic, dynamic> json, String key) => json['main']['temp'] as double;
-double _feelsLikeFromJson(Map<dynamic, dynamic> json, String key) => json['main']['feels_like'] as double;
-double _tempMinFromJson(Map<dynamic, dynamic> json, String key) => json['main']['temp_min'] as double;
-double _tempMaxFromJson(Map<dynamic, dynamic> json, String key) => json['main']['temp_max'] as double;
-int _pressureFromJson(Map<dynamic, dynamic> json, String key) => json['main']['pressure'] as int;
-int _humidityFromJson(Map<dynamic, dynamic> json, String key) => json['main']['humidity'] as int;
-
-// clouds
-int _cloudsFromJson(Map<String, dynamic> json) => json['all'] as int;
-
-// wind
-double _windSpeedFromJson(Map<dynamic, dynamic> json, String key) => json['wind']['speed'] as double;
-double _windGustFromJson(Map<dynamic, dynamic> json, String key) => (json['wind']['gust'] ?? 0.0) as double;
-int _windDegreeFromJson(Map<dynamic, dynamic> json, String key) => json['wind']['deg'] as int;
-
+double _rainFromJson(Map<dynamic, dynamic> json, String key) => json['rain']?['1h'] ?? 0.0;
+double _snowFromJson(Map<dynamic, dynamic> json, String key) => json['snow']?['1h'] ?? 0.0;
