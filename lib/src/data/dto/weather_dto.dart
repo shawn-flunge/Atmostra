@@ -21,8 +21,8 @@ class WeatherDto with _$WeatherDto {
     required int visibility,
     required Wind wind,
     required Clouds clouds,
-    @JsonKey(readValue: _rainFromJson) required double rain,
-    @JsonKey(readValue: _snowFromJson) required double snow,
+    @JsonKey(name: 'rain', readValue: _rainFromJson) required double rain,
+    @JsonKey(name: 'snow', readValue: _snowFromJson) required double snow,
   }) = _WeatherDto;
 
   factory WeatherDto.fromJson(Map<String, dynamic> json) => _$WeatherDtoFromJson(json);
@@ -92,5 +92,8 @@ String _countryFromJson(Map<dynamic, dynamic> json, String key) => json['sys']['
 int _sunriseFromJson(Map<dynamic, dynamic> json, String key) => (json['sys']['sunrise'] * 1000) as int;
 int _sunsetFromJson(Map<dynamic, dynamic> json, String key) => (json['sys']['sunset'] * 1000) as int;
 
-double _rainFromJson(Map<dynamic, dynamic> json, String key) => json['rain']?['1h'] ?? 0.0;
+double _rainFromJson(Map<dynamic, dynamic> json, String key) {
+  print('🚩 ${json['rain']} /////$json');
+  return json['rain']?['1h'] ?? 0.0;
+}
 double _snowFromJson(Map<dynamic, dynamic> json, String key) => json['snow']?['1h'] ?? 0.0;
